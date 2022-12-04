@@ -2,6 +2,7 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "type": "commonjs",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -14,10 +15,10 @@
     "express": "4.17.1",
     "joi": "^17.7.0",
     "morgan": "1.10.0",
-    "nanoid": "^4.0.0"
+    "nanoid": "^2.0.2"
   },
   "devDependencies": {
-    "eslint": "^8.28.0",
+    "eslint": "^8.29.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",

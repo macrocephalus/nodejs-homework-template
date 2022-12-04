@@ -1,48 +1,71 @@
-const express = require('express')
-const router = express.Router()
-const contacts = require('../../models/contacts')
+const express = require("express");
 
-router.get('/', async (req, res, next) => {
+const router = express.Router();
+const Joi = require("joi");
+const contacts = require("../../models/contacts");
+const { createError } = require("../../helpers");
+
+const {
+  addPostValidation,
+  updateValidation,
+} = require("../../middlewares/validationMiddleware");
+
+router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
-
     res.json(result);
   } catch (error) {
     next(error);
   }
-})
+});
 
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-
-    res.json({ message: 'template message' })
+    const { id } = req.params;
+    const result = await contacts.getContactById(id);
+    if (!result) {
+      throw createError(404);
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
-})
+});
 
-router.post('/', async (req, res, next) => {
+router.post("/", addPostValidation, async (req, res, next) => {
   try {
-
-    res.json({ message: 'template message' })
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
-  }})
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
-
-    res.json({ message: 'template message' })
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) {
+      throw createError(404);
+    }
+    res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
-  }})
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:id", updateValidation, async (req, res, next) => {
   try {
+    const { id } = req.params;
 
-    res.json({ message: 'template message' })
+    const result = await contacts.updateContact(id, req.body);
+    if (!result) {
+      throw createError(404);
+    }
+    res.status(201).json(result);
   } catch (error) {
     next(error);
-  }})
+  }
+});
 
-module.exports = router
+module.exports = router;
